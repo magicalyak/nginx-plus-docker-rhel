@@ -12,6 +12,11 @@ Nginx (pronounced "engine-x") is an open source reverse proxy server for HTTP, H
 
 # How to use this image
 
+## Prerequisites
+
+copy nginx-repo.crt and nginx-repo.key in the root diectory (Dockerfile copies them into the image)
+This should run on a properly subscribed Red Hat Enterprise Linux system (the container will assume the subscription from the OS)
+
 ## Hosting some simple static content
 
 ```console
