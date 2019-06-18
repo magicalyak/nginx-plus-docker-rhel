@@ -15,10 +15,24 @@ Nginx (pronounced "engine-x") is an open source reverse proxy server for HTTP, H
 ## Prerequisites
 
 copy nginx-repo.crt and nginx-repo.key in the root diectory (Dockerfile copies them into the image)
+
 This should run on a properly subscribed Red Hat Enterprise Linux system (the container will assume the subscription from the OS)
+
+## Building the Dockerfile
+
+```console
+$ cd nginx-plus-docker-rhel
+$ docker build run -t magicalyak/nginx-plus-docker-rhel .
+```
+
+## Hosting default content
+
+```console
+$ docker run --name nginx-plus-rhel -p 80:80/tcp -p 443:443/tcp -p 8080:8080/tcp -d magicalyak/nginx-plus-docker-rhel
+```
 
 ## Hosting some simple static content
 
 ```console
-$ docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d magicalyak/nginx-plus-docker-rhel
+$ docker run --name nginx-plus-rhel -v /some/content:/usr/share/nginx/html:ro -p 80:80/tcp -p 443:443/tcp -p 8080:8080/tcp -d magicalyak/nginx-plus-docker-rhel
 ```
