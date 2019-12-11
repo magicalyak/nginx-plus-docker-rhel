@@ -4,12 +4,12 @@ LABEL maintainer="tom.gamull@nginx.com"
 # Labels consumed by Red Hat build service
 LABEL Component="nginx" \
       Name="magicalyak/nginx-plus-docker-rhel" \
-      Version="1.19.0" \
+      Version="1.20.0" \
       Release="1"
 
 # Labels could be consumed by OpenShift
 LABEL io.k8s.description="nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server, originally written by Igor Sysoev." \
-      io.k8s.display-name="nginx 1.19.0" \
+      io.k8s.display-name="nginx 1.20.0" \
       io.openshift.expose-services="80:http" \
       io.openshift.tags="nginx"
 
