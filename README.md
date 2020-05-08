@@ -22,7 +22,7 @@ This should run on a properly subscribed Red Hat Enterprise Linux system (the co
 
 ```console
 $ cd nginx-plus-docker-rhel
-$ docker build run -t magicalyak/nginx-plus-docker-rhel .
+$ docker build -t magicalyak/nginx-plus-docker-rhel .
 ```
 
 ## Hosting default content
