@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhel
+FROM registry.access.redhat.com/ubi7:latest
 LABEL maintainer="tom.gamull@nginx.com"
 
 # Labels consumed by Red Hat build service
