@@ -25,15 +25,22 @@ RUN yum repolist --disablerepo=* && \
 COPY nginx-repo.crt /etc/ssl/nginx/
 COPY nginx-repo.key /etc/ssl/nginx/
 
+# For Offline we need to download these files from the cs.nginx.com site
+# https://cs.nginx.com/c/dist/direct/default/R21/centos/7/x86_64//RPMS/nginx-plus-21-1.el7.ngx.x86_64.rpm
+COPY nginx-plus-21-1.el7.ngx.x86_64.rpm /tmp
+# If you enable the modules below you need the following
+# https://cs.nginx.com/c/dist/direct/default/R21/centos/7/x86_64//RPMS/nginx-plus-module-njs-21+0.3.9-1.el7.ngx.x86_64.rpm
+# COPY nginx-plus-module-njs-21+0.3.9-1.el7.ngx.x86_64.rpm /tmp
+
+
 RUN yum install -y ca-certificates wget && \
-    wget -P /etc/yum.repos.d https://cs.nginx.com/static/files/nginx-plus-7.4.repo && \
-    yum -y install nginx-plus && \
+    rpm -Uvh /tmp/nginx-plus-21-1.el7.ngx.x86_64.rpm && \
     rm -rf /etc/nginx/conf.d/default.conf && \
-    ## Optional: Install NGINX Plus Modules from repo
+    ## Optional: Install NGINX Plus Modules from rpm
     # See https://www.nginx.com/products/nginx/modules
     #yum install -y nginx-plus-module-modsecurity && \
     #yum install -y nginx-plus-module-geoip && \
-    #yum install -y nginx-plus-module-njs && \
+    #rpm -Uvh /tmp/nginx-plus-module-njs-21+0.3.9-1.el7.ngx.x86_64.rpm && \
     yum -y autoremove && \
     yum clean all
 
@@ -52,8 +59,8 @@ RUN nginx -t && \
     ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
     ln -sf /dev/stdout /var/log/nginx/stream.log \
-    # **Remove the Nginx Plus cert/keys from the image**
-    rm /etc/ssl/nginx/nginx-repo.crt /etc/ssl/nginx/nginx-repo.key
+    # **Remove the Nginx Plus cert/keys from the image** (comment this to allow restarts)
+    rm /etc/ssl/nginx/nginx-repo.crt /etc/ssl/nginx/nginx-repo.key /tmp/nginx-plus-21-1.el7.ngx.x86_64.rpm
 
 COPY html/demo-index.html /usr/share/nginx/html
 
