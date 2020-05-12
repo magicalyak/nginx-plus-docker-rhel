@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhel
+FROM registry.access.redhat.com/ubi7:latest
 LABEL maintainer="tom.gamull@nginx.com"
 
 # Labels consumed by Red Hat build service
@@ -25,9 +25,9 @@ RUN yum repolist --disablerepo=* && \
 COPY nginx-repo.crt /etc/ssl/nginx/
 COPY nginx-repo.key /etc/ssl/nginx/
 
-RUN yum install -y ca-certificates wget && \
+RUN yum install -y --disableplugin=subscription-manager ca-certificates wget openssl && \
     wget -P /etc/yum.repos.d https://cs.nginx.com/static/files/nginx-plus-7.4.repo && \
-    yum -y install nginx-plus && \
+    yum install -y --disableplugin=subscription-manager nginx-plus && \
     rm -rf /etc/nginx/conf.d/default.conf && \
     ## Optional: Install NGINX Plus Modules from repo
     # See https://www.nginx.com/products/nginx/modules
