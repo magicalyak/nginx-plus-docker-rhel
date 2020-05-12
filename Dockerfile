@@ -14,9 +14,8 @@ LABEL io.k8s.description="nginx [engine x] is an HTTP and reverse proxy server, 
       io.openshift.tags="nginx"
 
 # Update image
-RUN yum repolist --disablerepo=* && \
-    yum-config-manager --disable \* > /dev/null && \
-    yum-config-manager --enable rhel-7-server-rpms > /dev/null && \
+RUN yum update --disableplugin=subscription-manager -y && \
+    rm -rf /var/cache/yum && \
     mkdir -p /etc/ssl/nginx
 
 ## Install Nginx Plus
@@ -31,13 +30,11 @@ RUN yum install -y --disableplugin=subscription-manager ca-certificates wget ope
     rm -rf /etc/nginx/conf.d/default.conf && \
     ## Optional: Install NGINX Plus Modules from repo
     # See https://www.nginx.com/products/nginx/modules
-    #yum install -y nginx-plus-module-modsecurity && \
-    #yum install -y nginx-plus-module-geoip && \
-    #yum install -y nginx-plus-module-njs && \
-    yum -y autoremove && \
-    yum clean all
+    #yum install -y --disableplugin=subscription-manager nginx-plus-module-modsecurity && \
+    #yum install -y --disableplugin=subscription-manager nginx-plus-module-geoip && \
+    #yum install -y --disableplugin=subscription-manager nginx-plus-module-njs && \
+    rm -rf /var/cache/yum
 
-COPY etc/nginx /etc/nginx
 
 # Optional: COPY over any of your SSL certs in /etc/ssl for HTTPS servers
 # e.g.
@@ -51,9 +48,10 @@ RUN nginx -t && \
     # Forward request logs to docker log collector
     ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
-    ln -sf /dev/stdout /var/log/nginx/stream.log \
+    # ln -sf /dev/stdout /var/log/nginx/stream.log \
     # **Remove the Nginx Plus cert/keys from the image**
-    rm /etc/ssl/nginx/nginx-repo.crt /etc/ssl/nginx/nginx-repo.key
+    # rm /etc/ssl/nginx/nginx-repo.crt /etc/ssl/nginx/nginx-repo.key
+    nginx -T
 
 COPY html/demo-index.html /usr/share/nginx/html
 
